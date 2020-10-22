@@ -5,6 +5,8 @@ au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
 au BufWrite /private/etc/pw.* set nowritebackup nobackup
 
 let skip_defaults_vim=1
+let mapleader = "`"
+
 
 call plug#begin('~/.vim/plugged')
 Plug 'mhinz/vim-startify'
@@ -22,6 +24,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'jiangmiao/auto-pairs'
 Plug 'easymotion/vim-easymotion'
+Plug 'tpope/vim-surround'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 " theme setting
@@ -38,9 +42,13 @@ set modelines=0		" CVE-2007-2438
 " remove change the following statements
 set nocompatible	" Use Vim defaults instead of 100% vi compatibility
 set backspace=2		" more powerful backspacing
+set shiftwidth=2
 set tabstop=2
+set autoindent
+set smarttab  
+set expandtab
 set number
-" set relativenumber " 相对行号
+set relativenumber " 相对行号
 set syntax=on
 set autoindent
 set cindent
@@ -48,14 +56,26 @@ set autoread
 set ignorecase " 查找忽略大小写
 set smartcase  " 查找大写时不忽略
 set expandtab " 将tab转换成空格
+set clipboard+=unnamed " 共享剪贴板
+
 
 " Visual
 set showmatch "显示括号匹配
 set matchtime=5 "括号显示时间
-set autochdir " 自动打开当前目录
+" set autochdir " 自动打开当前目录
+set autowrite
 
 
+" keymap
+" 缩进
+nnoremap < << 
+nnoremap > >> 
 
+" 替换 ^ $ G gg 
+noremap H ^
+noremap L $
+noremap J G
+noremap K gg
 " PluginSetting
 "
 " NERDTree
@@ -130,4 +150,46 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 6, 4)<CR>
 " 使用 ss 启用
 nmap ss <Plug>(easymotion-s2)
 
+" ctags 配置
+let Tlist_Ctags_Cmd="/usr/local/bin/ctags"
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Use_Right_Window=1
 
+" vim-go 配置
+autocmd FileType go nmap <leader>b <Plug>(go-build)
+autocmd FileType go nmap <leader>r <Plug>(go-run)
+
+let g:go_fmt_command = "goimports"
+let g:go_autodetect_gopath = 1
+let g:go_list_type = "quickfix"
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_generate_tags = 1
+
+" coc 配置
+set cmdheight=2
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif

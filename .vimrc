@@ -25,6 +25,8 @@ Plug 'terryma/vim-smooth-scroll'
 Plug 'jiangmiao/auto-pairs'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-surround'
+Plug 'gcmt/wildfire.vim'
+Plug 'mg979/vim-xtabline'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
@@ -79,7 +81,7 @@ noremap K gg
 " PluginSetting
 "
 " NERDTree
-map <C-t> :NERDTreeToggle<CR>
+map <leader>t :NERDTreeToggle<CR>
 " close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
@@ -124,9 +126,9 @@ let $FZF_DEFAULT_OPTS = '--layout=reverse'
 
 
 " fzf use rg search config
-command! -bang -nargs=* Rg
+command! -bang -nargs=* Ag
       \ call fzf#vim#grep(
-      \   "rg --column --line-number --no-heading --color=always --smart-case "
+      \   "ag --column --line-number --no-heading --color=always --smart-case "
       \   .(len(<q-args>) > 0 ? <q-args>: '""'),
       \   1,
       \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
@@ -136,7 +138,7 @@ command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " fzf vim
-nnoremap  <silent> <Leader>rg :Rg<CR>
+nnoremap  <silent> <Leader>ag :Ag<CR>
 nnoremap <C-b> :Buffers<CR>
 nnoremap <C-p> :Files<CR>
 
@@ -151,10 +153,11 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 6, 4)<CR>
 nmap ss <Plug>(easymotion-s2)
 
 " ctags 配置
-let Tlist_Ctags_Cmd="/usr/local/bin/ctags"
-let Tlist_Show_One_File=1
-let Tlist_Exit_OnlyWindow=1
-let Tlist_Use_Right_Window=1
+set tags=~/front-theory/apps/link/tags
+" let Tlist_Ctags_Cmd="~/front-theory/apps/link/ctags"
+" let Tlist_Show_One_File=1
+" let Tlist_Exit_OnlyWindow=1
+" let Tlist_Use_Right_Window=1
 
 " vim-go 配置
 autocmd FileType go nmap <leader>b <Plug>(go-build)
@@ -193,3 +196,20 @@ if has('nvim')
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
+
+" AG
+" command! -bang -nargs=* Ag
+"   \ call fzf#vim#ag(<q-args>,
+"   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+"   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+"   \                 <bang>0)
+" nnoremap <silent> <Leader>A :Ag<CR>
+
+" ===
+" === xtabline
+" ===
+let g:xtabline_settings = {}
+let g:xtabline_settings.enable_mappings = 0
+let g:xtabline_settings.tabline_modes = ['tabs', 'buffers']
+let g:xtabline_settings.enable_persistance = 0
+let g:xtabline_settings.last_open_first = 1

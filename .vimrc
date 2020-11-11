@@ -26,7 +26,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-surround'
 Plug 'gcmt/wildfire.vim'
-Plug 'mg979/vim-xtabline'
+Plug 'leafgarland/typescript-vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
@@ -125,22 +125,11 @@ endfunction
 let $FZF_DEFAULT_OPTS = '--layout=reverse'
 
 
-" fzf use rg search config
-command! -bang -nargs=* Ag
-      \ call fzf#vim#grep(
-      \   "ag --column --line-number --no-heading --color=always --smart-case "
-      \   .(len(<q-args>) > 0 ? <q-args>: '""'),
-      \   1,
-      \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
-      \   : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
-      \   <bang>0)
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " fzf vim
 nnoremap  <silent> <Leader>ag :Ag<CR>
-nnoremap <C-b> :Buffers<CR>
-nnoremap <C-p> :Files<CR>
+nnoremap  <silent> <Leader>b :Buffers<CR>
+nnoremap  <C-p> :Files<CR>
 
 " smooth scroll
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 6, 2)<CR>
@@ -160,7 +149,6 @@ set tags=~/front-theory/apps/link/tags
 " let Tlist_Use_Right_Window=1
 
 " vim-go 配置
-autocmd FileType go nmap <leader>b <Plug>(go-build)
 autocmd FileType go nmap <leader>r <Plug>(go-run)
 
 let g:go_fmt_command = "goimports"
@@ -189,6 +177,12 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+" GoTo code navigation.
+nmap <silent> <C-]> <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -197,19 +191,9 @@ else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-" AG
-" command! -bang -nargs=* Ag
-"   \ call fzf#vim#ag(<q-args>,
-"   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-"   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-"   \                 <bang>0)
-" nnoremap <silent> <Leader>A :Ag<CR>
 
 " ===
-" === xtabline
+" === airline
 " ===
-let g:xtabline_settings = {}
-let g:xtabline_settings.enable_mappings = 0
-let g:xtabline_settings.tabline_modes = ['tabs', 'buffers']
-let g:xtabline_settings.enable_persistance = 0
-let g:xtabline_settings.last_open_first = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'

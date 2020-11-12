@@ -14,7 +14,11 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Yggdroot/indentLine'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'sheerun/vim-polyglot'
+" Plug 'sheerun/vim-polyglot'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'yuezk/vim-js'
+Plug 'pangloss/vim-javascript'
 Plug 'joshdick/onedark.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
@@ -51,7 +55,6 @@ set smarttab
 set expandtab
 set number
 set relativenumber " 相对行号
-set syntax=on
 set autoindent
 set cindent
 set autoread
@@ -141,12 +144,6 @@ noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 6, 4)<CR>
 " 使用 ss 启用
 nmap ss <Plug>(easymotion-s2)
 
-" ctags 配置
-set tags=~/front-theory/apps/link/tags
-" let Tlist_Ctags_Cmd="~/front-theory/apps/link/ctags"
-" let Tlist_Show_One_File=1
-" let Tlist_Exit_OnlyWindow=1
-" let Tlist_Use_Right_Window=1
 
 " vim-go 配置
 autocmd FileType go nmap <leader>r <Plug>(go-run)
@@ -164,6 +161,7 @@ let g:go_highlight_generate_tags = 1
 
 " coc 配置
 set cmdheight=2
+autocmd CursorHold * silent call CocActionAsync('highlight')
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.

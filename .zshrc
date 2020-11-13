@@ -101,6 +101,8 @@ export NVM_DIR="$HOME/.nvm"
 
 # vim config
 alias vim='nvim'
+# bat
+alias cat='bat'
 # ctags
 # alias ctags='/usr/local/bin/ctags'
 #python config
@@ -121,6 +123,6 @@ alias trek='~/go/src/q7link.com/app/trek'
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export FZF_DEFAULT_COMMAND='fd --hidden --follow --exclude ".git" -exclude "node_modules"'
+export FZF_DEFAULT_COMMAND='fd --hidden --follow --exclude ".git" -exclude "node_modules" ~/'
 export FZF_COMPLETION_TRIGGER='**'
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border'

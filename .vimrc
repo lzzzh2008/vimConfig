@@ -4,6 +4,9 @@ au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
 " Don't write backup file if vim is being called by "chpass"
 au BufWrite /private/etc/pw.* set nowritebackup nobackup
 
+au BufNewFile,BufRead *.ts setlocal filetype=typescript
+au BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
+
 let skip_defaults_vim=1
 let mapleader = "`"
 
@@ -16,7 +19,8 @@ Plug 'Yggdroot/indentLine'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'sheerun/vim-polyglot'
 Plug 'HerringtonDarkholme/yats.vim'
-Plug 'maxmellon/vim-jsx-pretty'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'ianks/vim-tsx'
 Plug 'yuezk/vim-js'
 Plug 'pangloss/vim-javascript'
 Plug 'joshdick/onedark.vim'
@@ -43,7 +47,7 @@ colorscheme onedark
 
 " Configuration file for vim
 set modelines=0		" CVE-2007-2438
-
+filetype on
 " Normally we use vim-extensions. If you want true vi-compatibility
 " remove change the following statements
 set nocompatible	" Use Vim defaults instead of 100% vi compatibility
@@ -162,6 +166,8 @@ let g:go_highlight_function_calls = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_generate_tags = 1
 
+let g:vim_json_syntax_conceal = 0 "" 为了防止导致json的引号自动隐藏
+let g:indentLine_noConcealCursor=""  " 为了防止导致json的引号自动隐藏
 " coc 配置
 set hidden
 set nobackup

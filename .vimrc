@@ -76,6 +76,9 @@ set autowrite
 nnoremap < << 
 nnoremap > >> 
 
+"将jj映射到Esc
+inoremap jj <Esc> 
+
 " 替换 ^ $ G gg 
 noremap H ^
 noremap L $
@@ -126,7 +129,7 @@ endfunction
 
 " 让输入上方，搜索列表在下方
 let $FZF_DEFAULT_OPTS = '--layout=reverse'
-
+let $FZF_DEFAULT_COMMAND=''
 
 
 " fzf vim
@@ -160,7 +163,11 @@ let g:go_highlight_extra_types = 1
 let g:go_highlight_generate_tags = 1
 
 " coc 配置
+set hidden
+set nobackup
+set nowritebackup
 set cmdheight=2
+set updatetime=300
 autocmd CursorHold * silent call CocActionAsync('highlight')
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -175,6 +182,28 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+nmap <leader>rn <Plug>(coc-rename)
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <C-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 " GoTo code navigation.
 nmap <silent> <C-]> <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -184,7 +213,7 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Use <c-space> to trigger completion.
 if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
+  inoremap <silent><expr> <space> coc#refresh()
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif

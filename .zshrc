@@ -113,6 +113,7 @@ alias python=python3
 #easyJump
 alias front='~/front-theory/apps/link/src'
 alias trek='~/go/src/q7link.com/app/trek'
+alias h5='~/front-theory/apps/link-h5/src'
 #autojump
 [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
 

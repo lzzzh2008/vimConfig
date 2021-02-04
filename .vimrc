@@ -36,6 +36,9 @@ Plug 'tpope/vim-surround'
 Plug 'gcmt/wildfire.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
+
 call plug#end()
 
 " theme setting
@@ -239,3 +242,10 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 
 noremap <leader>] :bn<CR>
 noremap <leader>[ :bp<CR>
+
+
+" ===
+" === ranger 
+" ===
+let g:NERDTreeHijackNetrw = 0 " add this line if you use NERDTree
+let g:ranger_replace_netrw = 1 " open ranger when vim open a directory

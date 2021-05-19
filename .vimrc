@@ -20,8 +20,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'franbach/miramare'
 " Plug 'ianks/vim-tsx'
-Plug 'yuezk/vim-js'
+" Plug 'yuezk/vim-js'
 Plug 'pangloss/vim-javascript'
 Plug 'joshdick/onedark.vim'
 Plug 'vim-airline/vim-airline'
@@ -43,10 +44,18 @@ Plug 'preservim/nerdcommenter'
 call plug#end()
 
 " theme setting
+" set onedark
+" set termguicolors
+
+" let g:airline_theme='miramare'
 let g:airline_theme='onedark'
+let g:airline_powerline_fonts = 1   
+let g:miramare_enable_italic = 1
+let g:miramare_disable_italic_comment = 1
 
 syntax on
 colorscheme onedark
+" colorscheme miramare
 
 
 " Configuration file for vim
@@ -78,11 +87,12 @@ set matchtime=5 "括号显示时间
 " set autochdir " 自动打开当前目录
 set autowrite
 
-
 " keymap
 " 缩进
 nnoremap < << 
 nnoremap > >> 
+" 切换到当前目录
+nnoremap <silent> <leader>. :cd %:p:h<CR>
 
 "将jj映射到Esc
 inoremap jj <Esc> 
@@ -234,8 +244,8 @@ endif
 " ===
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
+" let g:airline#extensions#tabline#left_sep = ' '
+" let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " ===
 " === vimbuffer
@@ -280,3 +290,17 @@ let g:NERDTrimTrailingWhitespace = 1
 
 " Enable NERDCommenterToggle to check all selected lines is commented or not 
 let g:NERDToggleCheckAllLines = 1
+
+" neovide 
+
+let g:neovide_refresh_rate=144
+
+let g:neovide_transparency=0.95
+
+let g:neovide_cursor_vfx_mode = "railgun"
+
+set guifont=Hack\ Nerd\ Font,宋体\-简:h19
+
+set encoding=utf-8
+
+

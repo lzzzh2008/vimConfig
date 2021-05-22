@@ -103,6 +103,8 @@ export NVM_DIR="$HOME/.nvm"
 alias vim='nvim'
 # bat
 alias cat='bat'
+#neovide
+alias neovide='open /Applications/Neovide.app'
 # ctags
 # alias ctags='/usr/local/bin/ctags'
 #python config
@@ -127,3 +129,20 @@ alias h5='~/front-theory/apps/link-h5/src'
 export FZF_DEFAULT_COMMAND='fd --hidden --follow --exclude ".git" -exclude "node_modules" ~/'
 export FZF_COMPLETION_TRIGGER='**'
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
+
+# proxy
+# alias setproxy="export ALL_PROXY=socks5://127.0.0.1:9090"
+# alias unsetproxy="unset ALL_PROXY"
+function proxyon() {
+    export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+    export http_proxy="http://127.0.0.1:7890"
+    export https_proxy=$http_proxy
+    #export all_proxy=socks5://127.0.0.1:7890 # or this line
+    echo -e "已开启代理"
+}
+
+function proxyoff(){
+    unset http_proxy
+    unset https_proxy
+    echo -e "已关闭代理"
+}

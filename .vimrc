@@ -87,6 +87,7 @@ set matchtime=5 "括号显示时间
 " set autochdir " 自动打开当前目录
 set autowrite
 
+tnoremap kj <C-\><C-n>
 " keymap
 " 缩进
 nnoremap < << 
@@ -147,8 +148,7 @@ endfunction
 
 " 让输入上方，搜索列表在下方
 let $FZF_DEFAULT_OPTS = '--layout=reverse'
-let $FZF_DEFAULT_COMMAND=''
-
+let $FZF_DEFAULT_COMMAND= "fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --type f"
 
 " fzf vim
 nnoremap  <silent> <Leader>ag :Ag<CR>
@@ -299,7 +299,7 @@ let g:neovide_transparency=0.95
 
 let g:neovide_cursor_vfx_mode = "railgun"
 
-set guifont=Hack\ Nerd\ Font,宋体\-简:h19
+set guifont=FiraCode\ Nerd\ Font,宋体\-简:h19
 
 set encoding=utf-8
 

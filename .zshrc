@@ -1,6 +1,13 @@
+# neofetch
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-neofetch
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/zzh/.oh-my-zsh 
 # Set name of the theme to load. Optionally, if you set this to "random" 
@@ -52,6 +59,8 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  autojump
+  fzf
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -95,29 +104,43 @@ export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/h
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# autojump
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
 
 # vim config
 alias vim='nvim'
 # bat
 alias cat='bat'
+# tmux
+alias t='tmux'
 #neovide
-alias neovide='open /Applications/Neovide.app'
+alias neovide='nvm use 16&&open /Applications/Neovide'
+#leetcode
+alias lc='leetcode'
 # ctags
 # alias ctags='/usr/local/bin/ctags'
 #python config
-alias python2='/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7'
-alias python3='/usr/local/Cellar/python@3.8/3.8.6/bin/python3.8'
-alias python=python3
+# alias python2='/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7'
+# alias python3='/usr/local/Cellar/python@3.9/3.9.5/bin/python3.9'
+# alias python=python2
 
 #easyJump
-alias front='~/front-theory/apps/link/src'
+alias link='~/front-theory/apps/link/src'
+alias blink='~/back-front/apps/link/src'
 alias trek='~/go/src/q7link.com/app/trek'
 alias h5='~/front-theory/apps/link-h5/src'
-#autojump
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+
+#win
+alias win='sudo -b /Applications/Parallels\ Desktop.app/Contents/MacOS/prl_client_app'
+
+#brew 
+alias abrew='arch -arm64 /opt/homebrew/bin/brew'
+alias ibrew='arch -x86_64 /usr/local/bin/brew'
+
+#thefuck
+eval $(thefuck --alias)
 
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -126,8 +149,8 @@ alias h5='~/front-theory/apps/link-h5/src'
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export FZF_DEFAULT_COMMAND='fd --hidden --follow --exclude ".git" -exclude "node_modules" ~/'
 export FZF_COMPLETION_TRIGGER='**'
+export FZF_DEFAULT_COMMAND='fd --type d --hidden --follow --exclude .git node_modules common .config ~/'
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
 
 # proxy
@@ -137,7 +160,7 @@ function proxyon() {
     export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
     export http_proxy="http://127.0.0.1:7890"
     export https_proxy=$http_proxy
-    #export all_proxy=socks5://127.0.0.1:7890 # or this line
+    export all_proxy=socks5://127.0.0.1:7890 # or this line
     echo -e "已开启代理"
 }
 
@@ -146,3 +169,27 @@ function proxyoff(){
     unset https_proxy
     echo -e "已关闭代理"
 }
+
+
+# 77hub
+export KALEIDO_PATH=/Users/zzh/kaleido
+
+# HomeBrew
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/sbin:$PATH"
+alias brew='/opt/homebrew/bin/brew'
+export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+# HomeBrew END
+
+# make
+PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
+
+# ulimit
+ulimit -n 2048
+___MY_VMOPTIONS_SHELL_FILE="${HOME}/.jetbrains.vmoptions.sh"; if [ -f "${___MY_VMOPTIONS_SHELL_FILE}" ]; then . "${___MY_VMOPTIONS_SHELL_FILE}"; fi
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles/bottles
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
+
+
+

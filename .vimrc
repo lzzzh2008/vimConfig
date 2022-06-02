@@ -10,25 +10,22 @@ au BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
 let skip_defaults_vim=1
 let mapleader = "`"
 
-
 call plug#begin('~/.vim/plugged')
 Plug 'mhinz/vim-startify'
-Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'preservim/nerdtree'
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Yggdroot/indentLine'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'franbach/miramare'
-" Plug 'ianks/vim-tsx'
-" Plug 'yuezk/vim-js'
 Plug 'pangloss/vim-javascript'
 Plug 'joshdick/onedark.vim'
 Plug 'vim-airline/vim-airline'
-Plug 'christoomey/vim-tmux-navigator'
+" Plug 'christoomey/vim-tmux-navigator'
 Plug 'ryanoasis/vim-devicons'
-Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'jiangmiao/auto-pairs'
@@ -38,8 +35,22 @@ Plug 'gcmt/wildfire.vim'
 " Plug 'leafgarland/typescript-vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'francoiscabrol/ranger.vim'
+" Plug 'kevinhwang91/rnvimr'
 Plug 'rbgrouleff/bclose.vim'
 Plug 'preservim/nerdcommenter'
+" Plug 'zivyangll/git-blame.vim'
+Plug 'APZelos/blamer.nvim'
+Plug 'morhetz/gruvbox'
+Plug 'voldikss/vim-floaterm'
+" code runner
+Plug 'xianzhon/vim-code-runner'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'kristijanhusak/defx-icons'
+Plug 'kristijanhusak/defx-git'
+
+Plug 'github/copilot.vim'
 
 call plug#end()
 
@@ -47,14 +58,14 @@ call plug#end()
 " set onedark
 " set termguicolors
 
-" let g:airline_theme='miramare'
-let g:airline_theme='onedark'
+let g:airline_theme='miramare'
+" let g:airline_theme='onedark'
 let g:airline_powerline_fonts = 1   
 let g:miramare_enable_italic = 1
 let g:miramare_disable_italic_comment = 1
 
 syntax on
-colorscheme onedark
+colorscheme gruvbox
 " colorscheme miramare
 
 
@@ -73,6 +84,7 @@ set expandtab
 set number
 set relativenumber " 相对行号
 set autoindent
+set autowriteall
 set cindent
 set autoread
 set ignorecase " 查找忽略大小写
@@ -87,7 +99,7 @@ set matchtime=5 "括号显示时间
 " set autochdir " 自动打开当前目录
 set autowrite
 
-tnoremap kj <C-\><C-n>
+" tnoremap kj <C-\><C-n>
 " keymap
 " 缩进
 nnoremap < << 
@@ -95,23 +107,39 @@ nnoremap > >>
 " 切换到当前目录
 nnoremap <silent> <leader>. :cd %:p:h<CR>
 
-"将jj映射到Esc
-inoremap jj <Esc> 
+"将jk映射到Esc
+"noremap jk <Esc>
 
 " 替换 ^ $ G gg 
 noremap H ^
 noremap L $
 noremap J G
 noremap K gg
+
+" copy & pasete
+
+let g:neovide_input_use_logo = 1
+cnoremap <D-v> "+p<CR>
+map! <D-v> <C-R>+
+tmap <D-v> <C-R>+
+vmap <D-c> "+y<CR> 
+
 " PluginSetting
 "
 " NERDTree
-map <leader>t :NERDTreeToggle<CR>
+" map <leader>t :NERDTreeToggle<CR>
 " close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-
-
+" copy current file path
+function GetCurFilePath()
+    let cur_dir=getcwd()
+    let cur_file_name=getreg('%')
+    let dir_filename=cur_dir."".cur_file_name
+    echo dir_filename."         done"
+    call setreg('+',dir_filename)
+endfunction
+nnoremap <silent> <Leader>p :call GetCurFilePath()<CR>
 " FzF
 " 打开 fzf 的方式选择 floating window
 let g:fzf_layout = { 'down': '~70%', 'window': 'call OpenFloatingWin()' }
@@ -123,12 +151,16 @@ function! OpenFloatingWin()
 
   " 设置浮动窗口打开的位置，大小等。
   " 这里的大小配置可能不是那么的 flexible 有继续改进的空间
+        " \ 'width': width * 3/4,
+        " \ 'height': height/2
+        " \ 'row': height * 0.3,
+        " \ 'col': col + 30,
   let opts = {
         \ 'relative': 'editor',
-        \ 'row': height * 0.3,
-        \ 'col': col + 30,
-        \ 'width': width * 2 / 3,
-        \ 'height': height / 2
+        \ 'row': height,
+        \ 'col': col,
+        \ 'width': width,
+        \ 'height': height
         \ }
 
   let buf = nvim_create_buf(v:false, v:true)
@@ -148,7 +180,7 @@ endfunction
 
 " 让输入上方，搜索列表在下方
 let $FZF_DEFAULT_OPTS = '--layout=reverse'
-let $FZF_DEFAULT_COMMAND= "fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --type f"
+let $FZF_DEFAULT_COMMAND= "fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --type f -H"
 
 " fzf vim
 nnoremap  <silent> <Leader>ag :Ag<CR>
@@ -205,8 +237,8 @@ endfunction
 
 nmap <leader>rn <Plug>(coc-rename)
 " Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>z  <Plug>(coc-format-selected)
+nmap <leader>z <Plug>(coc-format-selected)
 
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
@@ -248,18 +280,23 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 " let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " ===
+" === git-blame
+" ===
+" nnoremap <Leader>s :<C-u>call gitblame#echo()<CR>
+
+" ===
 " === vimbuffer
 " ===
 
 noremap <leader>] :bn<CR>
 noremap <leader>[ :bp<CR>
-
+noremap <leader>x :bd<CR>
 
 " ===
 " === ranger 
 " ===
-let g:NERDTreeHijackNetrw = 0 " add this line if you use NERDTree
-let g:ranger_replace_netrw = 1 " open ranger when vim open a directory
+" let g:NERDTreeHijackNetrw = 0 " add this line if you use NERDTree
+" let g:ranger_replace_netrw = 1 " open ranger when vim open a directory
 
 " ===
 " === NerdCommenter 
@@ -297,10 +334,151 @@ let g:neovide_refresh_rate=144
 
 let g:neovide_transparency=0.95
 
-let g:neovide_cursor_vfx_mode = "railgun"
+let g:neovide_cursor_vfx_mode = "pixiedust"
+
+" let g:neovide_cursor_trail_length=0.3
+
+" let g:neovide_cursor_animation_length=0.08
 
 set guifont=FiraCode\ Nerd\ Font,宋体\-简:h19
 
 set encoding=utf-8
+
+" terminal
+let g:floaterm_keymap_toggle = '<Leader>t'
+
+" vim-git-blamer
+let g:blamer_enabled = 1
+let g:blamer_show_in_visual_modes = 0
+let g:blamer_show_in_insert_modes = 0
+
+" vim code runner
+nmap <silent><leader>j <plug>CodeRunner
+let g:code_runner_save_before_execute= 1 
+let g:CodeRunnerCommandMap = {
+      \ 'typescript' : '   node $fileName'
+      \}
+" copilot
+let g:copilot_node_command = "/Users/zzh/.nvm/versions/node/v16.13.0/bin/node"
+" Defx
+
+" Define mappings
+"cnoreabbrev sf Defx -listed -new
+"      \ -columns=indent:mark:icon:icons:filename:git:size
+"      \ -buffer-name=tab`tabpagenr()`<CR>
+nnoremap <silent><leader>w :<C-u>Defx -toggle -listed -resume 
+      \ -columns=-columns=indent:git:icon:icons:filename:type
+      \ -buffer-name=tab`tabpagenr()`
+      \ `expand('%:p:h')` -search=`expand('%:p')`<CR>
+nnoremap <silent>s :<C-u>Defx -new `expand('%:p:h')` -search=`expand('%:p')`<CR>
+
+autocmd FileType defx call s:defx_my_settings()
+	function! s:defx_my_settings() abort
+	  " Define mappings
+	  nnoremap <silent><buffer><expr> <CR>
+	  \ defx#do_action('drop')
+	  nnoremap <silent><buffer><expr> yy
+	  \ defx#do_action('copy')
+	  nnoremap <silent><buffer><expr> dd
+	  \ defx#do_action('move')
+	  nnoremap <silent><buffer><expr> pp
+	  \ defx#do_action('paste')
+	  nnoremap <silent><buffer><expr> l
+	  \ defx#do_action('drop')
+	  nnoremap <silent><buffer><expr> <Right>
+	  \ defx#do_action('drop')
+	  nnoremap <silent><buffer><expr> E
+	  \ defx#do_action('open', 'vsplit')
+	  nnoremap <silent><buffer><expr> n
+	  \ defx#do_action('open', 'pedit')
+	  nnoremap <silent><buffer><expr> i
+	  \ defx#do_action('open', 'choose')
+	  nnoremap <silent><buffer><expr> o
+	  \ defx#do_action('open_or_close_tree')
+	  nnoremap <silent><buffer><expr> K
+	  \ defx#do_action('new_directory')
+	  nnoremap <silent><buffer><expr> N
+	  \ defx#do_action('new_file')
+	  nnoremap <silent><buffer><expr> M
+	  \ defx#do_action('new_multiple_files')
+	  nnoremap <silent><buffer><expr> C
+	  \ defx#do_action('toggle_columns',
+	  \                'mark:indent:icon:filename:type:size:time')
+	  nnoremap <silent><buffer><expr> S
+	  \ defx#do_action('toggle_sort', 'time')
+	  nnoremap <silent><buffer><expr> dD
+	  \ defx#do_action('remove')
+	  nnoremap <silent><buffer><expr> r
+	  \ defx#do_action('rename')
+	  nnoremap <silent><buffer><expr> !
+	  \ defx#do_action('execute_command')
+	  nnoremap <silent><buffer><expr> x
+	  \ defx#do_action('execute_system')
+	  nnoremap <silent><buffer><expr> YY
+	  \ defx#do_action('yank_path')
+	  nnoremap <silent><buffer><expr> .
+	  \ defx#do_action('toggle_ignored_files')
+	  nnoremap <silent><buffer><expr> ;
+	  \ defx#do_action('repeat')
+	  nnoremap <silent><buffer><expr> h
+	  \ defx#do_action('cd', ['..'])
+	  nnoremap <silent><buffer><expr> <Left>
+	  \ defx#do_action('cd', ['..'])
+	  nnoremap <silent><buffer><expr> ~
+	  \ defx#do_action('cd')
+	  nnoremap <silent><buffer><expr> q
+	  \ defx#do_action('quit')
+	  nnoremap <silent><buffer><expr> <Space>
+	  \ defx#do_action('toggle_select') . 'j'
+	  nnoremap <silent><buffer><expr> m
+	  \ defx#do_action('toggle_select') . 'j'
+	  nnoremap <silent><buffer><expr> vv
+	  \ defx#do_action('toggle_select_all')
+	  nnoremap <silent><buffer><expr> *
+	  \ defx#do_action('toggle_select_all')
+	  nnoremap <silent><buffer><expr> j
+	  \ line('.') == line('$') ? 'gg' : 'j'
+	  nnoremap <silent><buffer><expr> k
+	  \ line('.') == 1 ? 'G' : 'k'
+	  nnoremap <silent><buffer><expr> <C-l>
+	  \ defx#do_action('redraw')
+	  nnoremap <silent><buffer><expr> <C-g>
+	  \ defx#do_action('print')
+	  nnoremap <silent><buffer><expr> cd
+	  \ defx#do_action('change_vim_cwd')
+		nnoremap <silent><buffer><expr> > defx#do_action('resize',
+		\ defx#get_context().winwidth + 10)
+		nnoremap <silent><buffer><expr> < defx#do_action('resize',
+		\ defx#get_context().winwidth - 10)
+	endfunction
+
+call defx#custom#column('icon', {
+      \ 'directory_icon': '▸',
+      \ 'opened_icon': '▾',
+      \ 'root_icon': ' ',
+      \ })
+
+call defx#custom#column('git', 'indicators', {
+  \ 'Modified'  : 'M',
+  \ 'Staged'    : '✚',
+  \ 'Untracked' : '✭',
+  \ 'Renamed'   : '➜',
+  \ 'Unmerged'  : '═',
+  \ 'Ignored'   : '☒',
+  \ 'Deleted'   : '✖',
+  \ 'Unknown'   : '?'
+  \ })
+
+call defx#custom#option('_', {
+            \ 'winwidth': 30,
+            \ 'split': 'vertical',
+            \ 'direction': 'topleft',
+            \ 'show_ignored_files': 0,
+            \ 'buffer_name': '',
+            \ })
+
+
+autocmd BufWritePost * call defx#redraw()
+" autocmd WinClosed * if winnr('$') <= 2 | qall | endif
 
 
